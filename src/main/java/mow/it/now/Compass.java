@@ -4,8 +4,6 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 
-import static mow.it.now.Compass.Direction.*;
-
 /**
  * @author sofiane
  * @version 1.0
@@ -19,7 +17,7 @@ public class Compass {
      *     S
      */
     public enum Direction { NORTH, EAST, SOUTH, WEST }
-    private static final List<Direction> directions = Lists.newArrayList(NORTH, EAST, SOUTH, WEST);
+    private static final List<Direction> directions = Lists.newArrayList(Direction.values());
 
     public static Direction right(Direction direction) {
         int idx = directions.indexOf(direction);
