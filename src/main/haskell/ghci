@@ -1,0 +1,43 @@
+-- let lawn = Lawn 5 5
+-- lawn
+-- max_x lawn
+-- max_y lawn
+-- let position = Position 2 1 NORTH
+-- position
+-- x position
+-- y position
+-- direction position
+-- let mower = Mower position lawn
+-- mower
+-- position mower
+-- lawn mower
+-- contains (Lawn 5 5) (Position 2 1 NORTH) -- True
+-- contains (Lawn 5 5) (Position 6 1 NORTH) -- False
+-- update_position LEFT (Position 1 1 NORTH)
+-- update_position FORWARD (Position 1 1 NORTH)
+-- using function composition
+-- (update_position LEFT .
+--  update_position FORWARD .
+--  update_position LEFT .
+--  update_position FORWARD .
+--  update_position LEFT .
+--  update_position FORWARD .
+--  update_position LEFT .
+--  update_position FORWARD .
+--  update_position FORWARD) (Position 1 2 NORTH)
+-- (update_position FORWARD .
+--  update_position FORWARD .
+--  update_position RIGHT .
+--  update_position FORWARD .
+--  update_position FORWARD .
+--  update_position RIGHT .
+--  update_position FORWARD .
+--  update_position RIGHT .
+--  update_position RIGHT .
+--  update_position FORWARD) (Position 3 3 EAST)
+-- using fold left powaa
+-- foldl update_position (Position 1 2 NORTH) [LEFT, FORWARD, LEFT, FORWARD, LEFT, FORWARD, LEFT, FORWARD, FORWARD]
+-- foldl update_position (Position 3 3 EAST) [FORWARD, FORWARD, RIGHT, FORWARD, FORWARD, RIGHT, FORWARD, RIGHT, RIGHT, FORWARD];
+-- move_mower (Position 1 2 NORTH) [LEFT, FORWARD, LEFT, FORWARD, LEFT, FORWARD, LEFT, FORWARD, FORWARD]
+-- move_mower (Position 3 3 EAST) [FORWARD, FORWARD, RIGHT, FORWARD, FORWARD, RIGHT, FORWARD, RIGHT, RIGHT, FORWARD]
+-- move_mower_in_lawn (Lawn 5 5) (Position 1 2 NORTH) [LEFT, FORWARD, LEFT, FORWARD, LEFT, FORWARD, LEFT, FORWARD, FORWARD]
