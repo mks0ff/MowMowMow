@@ -12,5 +12,5 @@ instance Arbitrary Move where
 
 main :: IO [Move] -- todo add some quick check tests
 main = do
-    let moves = sample' arbitrary
+    sample' arbitrary
 
