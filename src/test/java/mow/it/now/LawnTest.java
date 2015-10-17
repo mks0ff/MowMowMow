@@ -12,8 +12,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class LawnTest {
 
-    @DataProvider(name = "lawn_data")
-    public Object[][] lawn_data_provider() {
+    @DataProvider(name = "lawn_position_data")
+    public Object[][] lawn_position_data_provider() {
         return new Object[][] {
                 { 0, 0, true },
                 { 0, 1, true },
@@ -49,9 +49,23 @@ public class LawnTest {
         };
     }
 
-    @Test(dataProvider = "lawn_data")
+    @Test(dataProvider = "lawn_position_data")
     public void lawn_border_ok(int x, int y, boolean expected) {
         final Lawn lawn = new Lawn(4, 4);
         assertThat(lawn.contains(new Position(x, y, NORTH))).isEqualTo(expected);
     }
+
+    @Test
+    public void lawn_ok() {
+        final Lawn lawn = new Lawn(4, 4);
+        assertThat(lawn).isNotNull();
+        assertThat(lawn.getRow()).isEqualTo(4);
+        assertThat(lawn.getColumn()).isEqualTo(4);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void lawn_ko() {
+        new Lawn(-2, 4);
+    }
+
 }

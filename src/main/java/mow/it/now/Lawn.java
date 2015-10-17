@@ -1,5 +1,7 @@
 package mow.it.now;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
  * @author sofiane
  * @version 1.0
@@ -11,6 +13,7 @@ public class Lawn {
     private final int column;
 
     public Lawn(int row, int column) {
+        checkArgument(0 <= row && 0 <= column);
         this.row = row;
         this.column = column;
     }

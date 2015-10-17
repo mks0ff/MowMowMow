@@ -21,7 +21,7 @@ public class Mower {
     }
 
     private void validate(Position position, Lawn lawn) {
-        checkArgument(lawn.contains(position), "The position of the mower should be in the board lawn.");
+        checkArgument(lawn.contains(position), "The position of the mower should be in the lawn.");
     }
 
     public Position getPosition() {
