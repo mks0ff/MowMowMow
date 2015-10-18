@@ -21,11 +21,11 @@ contains_position (Lawn {max_x = lx, max_y = ly}) (Position {x = px, y = py, dir
 
 data Move = LEFT | RIGHT | FORWARD deriving (Eq, Ord, Show, Bounded, Enum)
 
-update_direction :: Position -> Direction -> Position
-update_direction (Position {x = px, y = py, direction = dir}) NORTH = Position px (py + 1) dir
-update_direction (Position {x = px, y = py, direction = dir}) WEST = Position (px - 1) py dir
-update_direction (Position {x = px, y = py, direction = dir}) EAST = Position (px + 1) py dir
-update_direction (Position {x = px, y = py, direction = dir}) SOUTH = Position px (py -1) dir
+update_position_ :: Position -> Direction -> Position
+update_position_ (Position {x = px, y = py, direction = dir}) NORTH = Position px (py + 1) dir
+update_position_ (Position {x = px, y = py, direction = dir}) WEST = Position (px - 1) py dir
+update_position_ (Position {x = px, y = py, direction = dir}) EAST = Position (px + 1) py dir
+update_position_ (Position {x = px, y = py, direction = dir}) SOUTH = Position px (py -1) dir
 
 update_position_in_lawn :: Lawn -> Position -> Move -> Position
 update_position_in_lawn lawn position move
@@ -36,21 +36,14 @@ update_position_in_lawn lawn position move
 update_position :: Position -> Move -> Position
 update_position (Position {x = px, y = py, direction = dir}) LEFT = Position px py (left dir)
 update_position (Position {x = px, y = py, direction = dir}) RIGHT = Position px py (right dir)
-update_position (Position {x = px, y = py, direction = dir}) FORWARD = update_direction (Position px py dir) dir
+update_position (Position {x = px, y = py, direction = dir}) FORWARD = update_position_ (Position px py dir) dir
 
-move_mower :: Lawn -> Position -> [Move] -> Position
-move_mower lawn position moves = foldl (update_position_in_lawn lawn) position moves
+move_mower_ :: Lawn -> Position -> [Move] -> Position
+move_mower_ lawn position moves = foldl (update_position_in_lawn lawn) position moves
 
-move_mower_in_lawn :: Lawn -> Position -> [Move] -> Position
-move_mower_in_lawn lawn position moves
-    | contains_position lawn position = move_mower lawn position moves -- check the initial position
-    | otherwise = position -- don't move !
-
-move_mower_ :: Mower -> [Move] -> Position
-move_mower_ (Mower {lawn = l, position = pos}) moves = move_mower l pos moves
+move_mower :: Mower -> [Move] -> Position
+move_mower (Mower {lawn = l, position = pos}) moves = move_mower_ l pos moves
 
 main = do
-    let lawn = Lawn 5 5 -- define our lawn
-        position = Position 3 3 EAST -- define our initial position
-        mower = Mower lawn position -- define our mower
-    move_mower_ mower [FORWARD, FORWARD, RIGHT, FORWARD, FORWARD, RIGHT, FORWARD, RIGHT, RIGHT, FORWARD] -- let's move that shit !
+    let mower = Mower (Lawn 5 5) (Position 3 3 EAST) -- define our mower with a lawn and an initial position
+    move_mower mower [FORWARD, FORWARD, RIGHT, FORWARD, FORWARD, RIGHT, FORWARD, RIGHT, RIGHT, FORWARD] -- let's move that shit !
