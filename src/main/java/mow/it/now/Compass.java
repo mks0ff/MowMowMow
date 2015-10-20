@@ -16,7 +16,6 @@ public class Compass {
      * W - |- E
      *     S
      */
-    public enum Direction { NORTH, EAST, SOUTH, WEST }
     private static final List<Direction> directions = Lists.newArrayList(Direction.values());
 
     public static Direction right(Direction direction) {
@@ -27,5 +26,31 @@ public class Compass {
     public static Direction left(Direction direction) {
         int idx = directions.indexOf(direction);
         return (idx <= 0) ? directions.get(directions.size()-1) : directions.get(idx - 1);
+    }
+
+    public enum Direction {
+        NORTH {
+            @Override
+            public Position go(Position current) {
+                return new Position(current.getX(), current.getY() + 1, current.getDirection());
+            }
+        }, EAST {
+            @Override
+            public Position go(Position current) {
+                return new Position(current.getX() + 1, current.getY(), current.getDirection());
+            }
+        }, SOUTH {
+            @Override
+            public Position go(Position current) {
+                return new Position(current.getX(), current.getY() - 1, current.getDirection());
+            }
+        }, WEST {
+            @Override
+            public Position go(Position current) {
+                return new Position(current.getX() - 1, current.getY(), current.getDirection());
+            }
+        };
+
+        public abstract Position go(Position current);
     }
 }

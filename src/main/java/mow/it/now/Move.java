@@ -1,6 +1,5 @@
 package mow.it.now;
 
-import static mow.it.now.Compass.Direction.*;
 
 /**
  * @author sofiane
@@ -22,24 +21,9 @@ public enum Move {
     FORWARD {
         @Override
         public Position make(Position current) {
-            return moveForward(current);
+            return current.getDirection().go(current);
         }
     };
 
-    private static Position moveForward(Position current) {
-        if (NORTH == current.getDirection()) {
-            return new Position(current.getX(), current.getY() + 1, current.getDirection());
-        }
-        if (EAST == current.getDirection()) {
-            return new Position(current.getX() + 1, current.getY(), current.getDirection());
-        }
-        if (SOUTH == current.getDirection()) {
-            return new Position(current.getX(), current.getY() - 1, current.getDirection());
-        }
-        // WEST
-        return new Position(current.getX() - 1, current.getY(), current.getDirection());
-    }
-
     public abstract Position make(Position current);
-
 }
