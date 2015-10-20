@@ -1,5 +1,7 @@
 module MowMowMow where
 
+import Test.QuickCheck
+
 -- author sofiane
 
 data Direction = NORTH | EAST | SOUTH | WEST deriving (Eq, Ord, Show, Bounded, Enum)
@@ -44,6 +46,23 @@ move_mower_ lawn position moves = foldl (update_position_in_lawn lawn) position 
 move_mower :: Mower -> [Move] -> Position
 move_mower (Mower {lawn = l, position = pos}) moves = move_mower_ l pos moves
 
+-- generate arbitrary moves
+instance Arbitrary Move where
+  arbitrary = do
+    n <- choose (0,2) :: Gen Int
+    return $ case n of
+      0 -> LEFT
+      1 -> RIGHT
+      2 -> FORWARD
+
+-- here we define our properties that the function move_mower should satisfy
+-- property one -> we should always have final position in the lawn
+prop_position :: [Move] -> Bool
+prop_position moves =
+    contains_position (Lawn 5 5) (move_mower (Mower (Lawn 5 5) (Position 3 3 EAST)) moves)
+
+-- run : quickCheck prop_position
+-- Main :: IO()
 main = do
     let mower = Mower (Lawn 5 5) (Position 3 3 EAST) -- define our mower with a lawn and an initial position
     move_mower mower [FORWARD, FORWARD, RIGHT, FORWARD, FORWARD, RIGHT, FORWARD, RIGHT, RIGHT, FORWARD] -- let's move that shit !

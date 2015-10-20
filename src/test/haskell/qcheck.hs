@@ -10,7 +10,8 @@ instance Arbitrary Move where
       1 -> RIGHT
       2 -> FORWARD
 
-main :: IO [Move] -- todo add some quick check tests
+-- generate arbitrary moves for our mower !
+main :: IO [Move]
 main = do
     sample' arbitrary
 
