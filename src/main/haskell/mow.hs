@@ -19,7 +19,7 @@ data Position = Position { x :: Int, y :: Int, direction :: Direction } deriving
 data Mower = Mower { lawn :: Lawn, position :: Position } deriving (Eq, Show)
 
 contains_position :: Lawn -> Position -> Bool
-contains_position (Lawn {max_x = lx, max_y = ly}) (Position {x = px, y = py, direction = _}) = (lx >= px && ly >= py && px >= 0 && py >= 0)
+contains_position (Lawn {max_x = lx, max_y = ly}) (Position {x = px, y = py, direction = _}) = px `elem` [0 .. lx] && py `elem` [0 .. ly]
 
 data Move = LEFT | RIGHT | FORWARD deriving (Eq, Ord, Show, Bounded, Enum)
 
@@ -56,13 +56,17 @@ instance Arbitrary Move where
       2 -> FORWARD
 
 -- here we define our properties that the function move_mower should satisfy
--- property one -> we should always have final position in the lawn
+-- property -> we should always have final position in the lawn
 prop_position :: [Move] -> Bool
 prop_position moves =
-    contains_position (Lawn 5 5) (move_mower (Mower (Lawn 5 5) (Position 3 3 EAST)) moves)
+    contains_position lawn final_position
+    where lawn = Lawn 5 5
+          initial_position = Position 1 2 NORTH
+          mower = Mower lawn initial_position
+          final_position = move_mower mower moves
 
--- run : quickCheck prop_position
--- Main :: IO()
+-- quickCheck prop_position
+
 main = do
     let mower = Mower (Lawn 5 5) (Position 3 3 EAST) -- define our mower with a lawn and an initial position
     move_mower mower [FORWARD, FORWARD, RIGHT, FORWARD, FORWARD, RIGHT, FORWARD, RIGHT, RIGHT, FORWARD] -- let's move that shit !
