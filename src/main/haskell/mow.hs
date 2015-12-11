@@ -5,6 +5,10 @@ import Test.QuickCheck
 -- author sofiane
 
 data Direction = NORTH | EAST | SOUTH | WEST deriving (Eq, Ord, Show, Bounded, Enum)
+data Lawn = Lawn { max_x :: Int, max_y :: Int } deriving (Eq, Show)
+data Position = Position { x :: Int, y :: Int, direction :: Direction } deriving (Eq, Show)
+data Mower = Mower { lawn :: Lawn, position :: Position } deriving (Eq, Show)
+data Move = LEFT | RIGHT | FORWARD deriving (Eq, Ord, Show, Bounded, Enum)
 
 left :: Direction -> Direction
 left NORTH = WEST
@@ -14,14 +18,8 @@ right :: Direction -> Direction
 right WEST = NORTH
 right direction = succ direction
 
-data Lawn = Lawn { max_x :: Int, max_y :: Int } deriving (Eq, Show)
-data Position = Position { x :: Int, y :: Int, direction :: Direction } deriving (Eq, Show)
-data Mower = Mower { lawn :: Lawn, position :: Position } deriving (Eq, Show)
-
 contains_position :: Lawn -> Position -> Bool
 contains_position (Lawn {max_x = lx, max_y = ly}) (Position {x = px, y = py, direction = _}) = px `elem` [0 .. lx] && py `elem` [0 .. ly]
-
-data Move = LEFT | RIGHT | FORWARD deriving (Eq, Ord, Show, Bounded, Enum)
 
 update_position_ :: Position -> Direction -> Position
 update_position_ (Position {x = px, y = py, direction = dir}) NORTH = Position px (py + 1) dir
@@ -66,7 +64,7 @@ prop_position moves =
           final_position = move_mower mower moves
 
 -- quickCheck prop_position
-
+main :: IO ()
 main = do
     let mower = Mower (Lawn 5 5) (Position 3 3 EAST) -- define our mower with a lawn and an initial position
-    move_mower mower [FORWARD, FORWARD, RIGHT, FORWARD, FORWARD, RIGHT, FORWARD, RIGHT, RIGHT, FORWARD] -- let's move that shit !
+    putStrLn $ show $ move_mower mower [FORWARD, FORWARD, RIGHT, FORWARD, FORWARD, RIGHT, FORWARD, RIGHT, RIGHT, FORWARD] -- let's move that shit !
