@@ -21,11 +21,11 @@ right direction = succ direction
 contains_position :: Lawn -> Position -> Bool
 contains_position (Lawn {max_x = lx, max_y = ly}) (Position {x = px, y = py, direction = _}) = px `elem` [0 .. lx] && py `elem` [0 .. ly]
 
-update_position_ :: Position -> Direction -> Position
-update_position_ (Position {x = px, y = py, direction = dir}) NORTH = Position px (py + 1) dir
-update_position_ (Position {x = px, y = py, direction = dir}) WEST = Position (px - 1) py dir
-update_position_ (Position {x = px, y = py, direction = dir}) EAST = Position (px + 1) py dir
-update_position_ (Position {x = px, y = py, direction = dir}) SOUTH = Position px (py -1) dir
+compute_position :: Position -> Direction -> Position
+compute_position (Position {x = px, y = py, direction = dir}) NORTH = Position px (py + 1) dir
+compute_position (Position {x = px, y = py, direction = dir}) WEST = Position (px - 1) py dir
+compute_position (Position {x = px, y = py, direction = dir}) EAST = Position (px + 1) py dir
+compute_position (Position {x = px, y = py, direction = dir}) SOUTH = Position px (py -1) dir
 
 update_position_in_lawn :: Lawn -> Position -> Move -> Position
 update_position_in_lawn lawn position move
@@ -36,13 +36,13 @@ update_position_in_lawn lawn position move
 update_position :: Position -> Move -> Position
 update_position (Position {x = px, y = py, direction = dir}) LEFT = Position px py (left dir)
 update_position (Position {x = px, y = py, direction = dir}) RIGHT = Position px py (right dir)
-update_position (Position {x = px, y = py, direction = dir}) FORWARD = update_position_ (Position px py dir) dir
+update_position (Position {x = px, y = py, direction = dir}) FORWARD = compute_position (Position px py dir) dir
 
-move_mower_ :: Lawn -> Position -> [Move] -> Position
-move_mower_ lawn position moves = foldl (update_position_in_lawn lawn) position moves
+move_mower_in_lawn :: Lawn -> Position -> [Move] -> Position
+move_mower_in_lawn lawn position moves = foldl (update_position_in_lawn lawn) position moves
 
 move_mower :: Mower -> [Move] -> Position
-move_mower (Mower {lawn = l, position = pos}) moves = move_mower_ l pos moves
+move_mower (Mower {lawn = l, position = pos}) moves = move_mower_in_lawn l pos moves
 
 -- generate arbitrary moves
 instance Arbitrary Move where
